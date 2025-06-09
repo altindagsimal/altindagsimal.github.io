@@ -1,2 +1,37 @@
 # altindagsimal.github.io
+{\rtf1\ansi\ansicpg1254\cocoartf2761
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html lang="en">\
+<head>\
+    <meta charset="UTF-8">\
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
+    <title>Skincare Advisor</title>\
+    <link rel="stylesheet" href="style.css">\
+    <link rel="preconnect" href="https://fonts.googleapis.com">\
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">\
+</head>\
+<body>\
+    <div class="app-container">\
+        <div id="quiz-view">\
+            <h1 id="question-text">Is your skin dry?</h1>\
+            <div id="button-container">\
+                <button class="btn" id="yes-btn">Yes</button>\
+                <button class="btn" id="no-btn">No</button>\
+            </div>\
+        </div>\
+        <div id="result-view" class="hidden">\
+            <h2>Your Recommendation</h2>\
+            <p id="result-text"></p>\
+            <button class="btn" id="restart-btn">Assess Again</button>\
+        </div>\
+    </div>\
+    <script src="script.js"></script>\
+</body>\
+</html>}
