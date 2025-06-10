@@ -3,14 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const startScreen = document.getElementById('start-screen');
     const quizScreen = document.getElementById('quiz-screen');
     const resultScreen = document.getElementById('result-screen');
-    
+
     const startButton = document.getElementById('start-btn');
     const restartButton = document.getElementById('restart-btn');
 
     const questionText = document.getElementById('question-text');
     const yesButton = document.getElementById('yes-btn');
     const noButton = document.getElementById('no-btn');
-    
+
     const resultText = document.getElementById('result-text');
 
     // 2. Flowchart and Results Data
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'r_sb': 'Excessive oily food can affect your skin. You should start eating a more balanced diet.',
         'r_cd2': 'Since common external factors have been ruled out, you should consult a dermatologist to identify the underlying issue.'
     };
-    
+
     let currentNodeId;
 
     // 3. Core Functions
@@ -82,10 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleAnswer(answer) {
         const currentNode = flowchart[currentNodeId];
         const nextNodeId = answer ? currentNode.yes : currentNode.no;
-        
+
         // Add visual feedback for transition
         quizScreen.classList.add('fade-out');
-        
+
         // Wait for the fade-out transition to complete before changing content
         setTimeout(() => {
             currentNodeId = nextNodeId;
