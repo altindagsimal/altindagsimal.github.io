@@ -1,7 +1,8 @@
+
 /* General Body and Font Styles */
 body {
-    background-color: #121212;
-    color: #e0e0e0;
+    background: linear-gradient(135deg, #2d5016 0%, #4a7c59 50%, #8fbc8f 100%);
+    color: #2c3e2d;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     display: flex;
     justify-content: center;
@@ -10,23 +11,116 @@ body {
     margin: 0;
     padding: 20px;
     box-sizing: border-box;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Subtle texture background with ivy silhouettes */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(255,140,0,0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(34,139,34,0.03) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255,165,0,0.02) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* White ivy silhouettes background */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path d="M10,10 Q20,5 30,15 Q40,25 50,20 Q60,15 70,25 Q80,35 90,30 Q100,25 110,35 L115,40 Q125,30 135,40 Q145,50 155,45 Q165,40 175,50 Q185,60 190,55" stroke="white" stroke-width="3" fill="none" opacity="0.08"/><circle cx="25" cy="18" r="4" fill="white" opacity="0.06"/><circle cx="45" cy="22" r="3" fill="white" opacity="0.06"/><circle cx="65" cy="28" r="5" fill="white" opacity="0.06"/><circle cx="85" cy="32" r="3" fill="white" opacity="0.06"/><circle cx="105" cy="38" r="4" fill="white" opacity="0.06"/><circle cx="125" cy="42" r="3" fill="white" opacity="0.06"/><circle cx="145" cy="48" r="4" fill="white" opacity="0.06"/><circle cx="165" cy="52" r="3" fill="white" opacity="0.06"/></svg>'),
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 300"><path d="M20,20 Q30,15 40,25 Q50,35 60,30 Q70,25 80,35 Q90,45 100,40 Q110,35 120,45 Q130,55 140,50 Q150,45 160,55 Q170,65 180,60 Q190,55 200,65 Q210,75 220,70 Q230,65 240,75 Q250,85 260,80" stroke="white" stroke-width="2" fill="none" opacity="0.05"/><circle cx="35" cy="28" r="3" fill="white" opacity="0.04"/><circle cx="55" cy="32" r="4" fill="white" opacity="0.04"/><circle cx="75" cy="38" r="3" fill="white" opacity="0.04"/><circle cx="95" cy="42" r="4" fill="white" opacity="0.04"/><circle cx="115" cy="48" r="3" fill="white" opacity="0.04"/><circle cx="135" cy="52" r="4" fill="white" opacity="0.04"/><circle cx="155" cy="58" r="3" fill="white" opacity="0.04"/><circle cx="175" cy="62" r="4" fill="white" opacity="0.04"/><circle cx="195" cy="68" r="3" fill="white" opacity="0.04"/><circle cx="215" cy="72" r="4" fill="white" opacity="0.04"/><circle cx="235" cy="78" r="3" fill="white" opacity="0.04"/></svg>'),
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 250"><path d="M180,10 Q170,15 160,25 Q150,35 140,30 Q130,25 120,35 Q110,45 100,40 Q90,35 80,45 Q70,55 60,50 Q50,45 40,55 Q30,65 20,60 Q10,55 5,65" stroke="white" stroke-width="2" fill="none" opacity="0.06"/><circle cx="165" cy="28" r="3" fill="white" opacity="0.05"/><circle cx="145" cy="32" r="4" fill="white" opacity="0.05"/><circle cx="125" cy="38" r="3" fill="white" opacity="0.05"/><circle cx="105" cy="42" r="4" fill="white" opacity="0.05"/><circle cx="85" cy="48" r="3" fill="white" opacity="0.05"/><circle cx="65" cy="52" r="4" fill="white" opacity="0.05"/><circle cx="45" cy="58" r="3" fill="white" opacity="0.05"/><circle cx="25" cy="62" r="4" fill="white" opacity="0.05"/></svg>');
+    background-position: 
+        0% 0%, 
+        100% 20%, 
+        20% 100%;
+    background-repeat: repeat-y, repeat-y, repeat-x;
+    background-size: 200px 200px, 150px 300px, 180px 250px;
+    pointer-events: none;
+    z-index: -1;
+    animation: ivyMove 60s linear infinite;
+}
+
+@keyframes ivyMove {
+    0% {
+        background-position: 
+            0% 0%, 
+            100% 20%, 
+            20% 100%;
+    }
+    100% {
+        background-position: 
+            0% 100%, 
+            100% 120%, 
+            120% 100%;
+    }
 }
 
 /* Main Application Container */
 .app-container {
-    background-color: #1e1e1e;
+    background: linear-gradient(145deg, rgba(255,248,220,0.95) 0%, rgba(240,255,240,0.95) 100%);
+    backdrop-filter: blur(10px);
     padding: 30px 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    border-radius: 45px 35px 50px 40px;
+    box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.2),
+        0 5px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 500px;
     text-align: center;
-    border: 1px solid #333;
+    border: 2px solid rgba(139, 195, 74, 0.3);
+    position: relative;
 }
+
+/* Decorative leaf elements */
+.app-container::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    width: 80px;
+    height: 80px;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M20,80 C25,30 45,10 70,20 C85,25 90,45 80,70 C70,85 45,90 30,75 C15,60 15,40 20,80 Z" fill="%23ff8c00" opacity="0.6"/><path d="M25,85 C30,35 50,15 75,25 C90,30 95,50 85,75 C75,90 50,95 35,80 C20,65 20,45 25,85 Z" fill="%234caf50" opacity="0.4"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 1;
+    opacity: 0.8;
+}
+
+.app-container::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: -10px;
+    width: 60px;
+    height: 60px;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="30" r="8" fill="%23ff6347"/><circle cx="35" cy="45" r="6" fill="%23ffa500"/><circle cx="65" cy="45" r="6" fill="%23ff69b4"/><circle cx="50" cy="60" r="7" fill="%23ff8c00"/><circle cx="40" cy="75" r="5" fill="%23da70d6"/><path d="M50,85 Q40,75 35,65 Q45,70 50,75 Q55,70 65,65 Q60,75 50,85" fill="%234caf50"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 1;
+    opacity: 0.7;
+}
+
+
 
 /* Screen transition effect */
 .screen {
     transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+    position: relative;
+    z-index: 2;
 }
 
 .screen.hidden {
@@ -38,46 +132,54 @@ body {
     transform: scale(0.95);
 }
 
-
 /* Headings and Paragraphs */
 h1 {
     font-size: 2rem;
-    color: #ffffff;
+    color: #2d5016;
     margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-weight: 700;
 }
 
 h2 {
     font-size: 1.5rem;
     margin-bottom: 25px;
+    color: #3e5c2a;
+    font-weight: 600;
 }
 
 p {
     font-size: 1.1rem;
     line-height: 1.6;
-    color: #b0b0b0;
+    color: #4a6741;
     margin-bottom: 25px;
 }
 
 /* Button Styles */
 .btn {
     border: none;
-    border-radius: 8px;
+    border-radius: 25px 20px 30px 18px;
     padding: 12px 24px;
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.2s, transform 0.2s;
+    transition: all 0.3s ease;
     display: inline-block;
     min-width: 120px;
+    position: relative;
+    overflow: hidden;
 }
 
 .btn-primary {
-    background-color: #007bff;
+    background: linear-gradient(135deg, #ff8c00 0%, #ff6347 100%);
     color: white;
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
 }
 
 .btn-primary:hover {
-    background-color: #0056b3;
+    background: linear-gradient(135deg, #ff7700 0%, #ff5722 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 140, 0, 0.4);
 }
 
 .button-group {
@@ -87,26 +189,99 @@ p {
 }
 
 .btn-choice {
-    background-color: #333;
-    color: #e0e0e0;
-    border: 1px solid #555;
+    background: linear-gradient(135deg, #8bc34a 0%, #4caf50 100%);
+    color: white;
+    border: 2px solid rgba(139, 195, 74, 0.3);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
 }
 
 .btn-choice:hover {
-    background-color: #444;
-    border-color: #777;
+    background: linear-gradient(135deg, #7cb342 0%, #43a047 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+    border-color: rgba(139, 195, 74, 0.5);
 }
 
 /* Visual Feedback for button press */
 .btn:active {
-    transform: scale(0.97);
+    transform: scale(0.97) translateY(0);
 }
+
+/* Add small flower decorations to buttons */
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="30" r="8" fill="white" opacity="0.8"/><circle cx="30" cy="50" r="8" fill="white" opacity="0.8"/><circle cx="70" cy="50" r="8" fill="white" opacity="0.8"/><circle cx="50" cy="70" r="8" fill="white" opacity="0.8"/><circle cx="50" cy="50" r="6" fill="%23ffd700"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-primary:hover::before {
+    opacity: 1;
+}
+
+.btn-choice::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50,20 Q60,30 70,40 Q60,50 50,60 Q40,50 30,40 Q40,30 50,20 Z" fill="white" opacity="0.7"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-choice:hover::after {
+    opacity: 1;
+}
+
+/* Additional background flower elements */
+.screen::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 25px;
+    height: 25px;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="25" r="6" fill="%23ff69b4" opacity="0.3"/><circle cx="25" cy="50" r="6" fill="%23ff69b4" opacity="0.3"/><circle cx="75" cy="50" r="6" fill="%23ff69b4" opacity="0.3"/><circle cx="50" cy="75" r="6" fill="%23ff69b4" opacity="0.3"/><circle cx="50" cy="50" r="4" fill="%23ffd700" opacity="0.5"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.screen::after {
+    content: '';
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50,10 Q65,25 80,40 Q65,55 50,70 Q35,55 20,40 Q35,25 50,10 Z" fill="%234caf50" opacity="0.2"/><path d="M30,30 Q45,20 60,30 Q55,45 45,55 Q35,45 30,30 Z" fill="%23ff8c00" opacity="0.3"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 0;
+    pointer-events: none;
+}
+
 
 
 /* Responsive Design */
 @media (max-width: 600px) {
     .app-container {
         padding: 20px;
+        margin: 10px;
     }
 
     h1 {
@@ -130,4 +305,8 @@ p {
         width: 100%;
         max-width: 250px;
     }
+
+    
 }
+
+
