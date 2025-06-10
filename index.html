@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skincare Advisor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen">
+            <h1>Facial Skin Advisor</h1>
+            <p>Answer a few questions to get a personalized skincare recommendation based on your skin's condition.</p>
+            <button id="start-btn" class="btn btn-primary">Check My Skin</button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="screen hidden">
+            <h2 id="question-text">Is your skin dry?</h2>
+            <div class="button-group">
+                <button id="yes-btn" class="btn btn-choice">Yes</button>
+                <button id="no-btn" class="btn btn-choice">No</button>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="screen hidden">
+            <h2>Recommendation</h2>
+            <p id="result-text">Here is your result.</p>
+            <button id="restart-btn" class="btn btn-primary">Start Over</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
