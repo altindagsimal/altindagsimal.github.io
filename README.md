@@ -1,1 +1,0 @@
-# altindagsimal.github.io
