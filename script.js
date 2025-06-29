@@ -1,114 +1,148 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. DOM Element Selection
-    const startScreen = document.getElementById('start-screen');
-    const quizScreen = document.getElementById('quiz-screen');
-    const resultScreen = document.getElementById('result-screen');
 
-    const startButton = document.getElementById('start-btn');
-    const restartButton = document.getElementById('restart-btn');
-
-    const questionText = document.getElementById('question-text');
-    const yesButton = document.getElementById('yes-btn');
-    const noButton = document.getElementById('no-btn');
-
-    const resultText = document.getElementById('result-text');
-
-    // 2. Flowchart and Results Data
-    const flowchart = {
-        'start': {
-            type: 'question',
-            text: 'Is your facial skin dry?',
-            yes: 'q_moisturizer',
-            no: 'q_allergy'
+    // --- DATA: All book recommendations based on the flowchart ---
+    const recommendations = {
+        'B': { // Beginner
+            'U': { // Under 150 pages
+                'L': ["Breakfast at Tiffany's – Truman Capote (~120 pages)", "A Room with a View – E.M. Forster (~140 pages)"],
+                'D': ["Of Mice and Men – John Steinbeck (~110 pages)", "Lord of the Flies – William Golding (~140 pages)"],
+                'S': ["Fahrenheit 451 – Ray Bradbury (~140 pages)", "Anthem – Ayn Rand (~100 pages)"],
+                'P': ["Siddhartha – Hermann Hesse (~120 pages)", "Demian – Hermann Hesse (~140 pages)"]
+            },
+            'V': { // 150-300 pages
+                'L': ["The Little Prince – Antoine de Saint-Exupéry (~100 pages)", "The Kreutzer Sonata – Leo Tolstoy (~100 pages) (simple edition)"],
+                'D': ["The Old Man and the Sea – Ernest Hemingway (~120 pages)", "The Death of Ivan Ilyich – Tolstoy (~100 pages)"],
+                'S': ["Animal Farm - George Orwell (~110 pages)", "The Pearl - Steinbeck (~90 pages)"],
+                'P': ["The Stranger - Albert Camus (~120 pages)", "The Metamorphosis - Kafka (~60 pages)"]
+            }
         },
-        'q_moisturizer': {
-            type: 'question',
-            text: 'Do you use a face moisturizer?',
-            yes: 'q_water',
-            no: 'r_sf' // Result: Start using face moisturizer
+        'I': { // Intermediate
+            'V': { // 150-300 pages
+                'L': ["Madame Bovary – Gustave Flaubert (~250 pages)", "A Room with a View – E.M. Forster (~220 pages)"],
+                'D': ["The Bell Jar – Sylvia Plath (~250 pages)", "The Catcher in the Rye – J.D. Salinger (~230 pages)"],
+                'S': ["The Trial – Franz Kafka (~240 pages)", "Native Son – Richard Wright (abridged) (~280 pages)"],
+                'P': ["Demian – Hermann Hesse (~250 pages)", "Steppenwolf – Hermann Hesse (simplified) (~270 pages)"]
+            },
+            'W': { // 300-500 pages
+                'L': ["The Age of Innocence – Edith Wharton (~320 pages)", "Jane Eyre – Charlotte Brontë (~400 pages)"],
+                'D': ["Crime and Punishment – Dostoyevsky (~430 pages)", "Jude the Obscure – Thomas Hardy (~450 pages)"],
+                'S': ["The Grapes of Wrath – John Steinbeck (~470 pages)", "Oliver Twist – Charles Dickens (~430 pages)"],
+                'P': ["The Plague – Albert Camus (~320 pages)", "Brave New World – Aldous Huxley (~300 pages)"]
+            }
         },
-        'q_water': {
-            type: 'question',
-            text: 'Do you drink around 3 liters of water daily?',
-            yes: 'r_cd1', // Result: Consult dermatologist
-            no: 'r_sd'  // Result: Start drinking water
-        },
-        'q_allergy': {
-            type: 'question',
-            text: 'Do you have an allergy to something?',
-            yes: 'r_af', // Result: Use allergy-friendly products
-            no: 'q_oily'
-        },
-        'q_oily': {
-            type: 'question',
-            text: 'Do you eat oily food?',
-            yes: 'r_sb', // Result: Start balanced diet
-            no: 'r_cd2'  // Result: Consult dermatologist
+        'A': { // Advanced
+            'Z': { // Over 500 pages
+                'L': ["Anna Karenina – Leo Tolstoy (abridged version) (~500 pages)", "Wuthering Heights – Emily Brontë (~400 pages)"],
+                'D': ["The Brothers Karamazov – Dostoyevsky (~800+ in most editions)", "The Idiot – Dostoyevsky (~500 pages)"],
+                'S': ["Bleak House – Charles Dickens (~500 pages)", "Les Misérables – Victor Hugo (partial edition) (~480 pages)"],
+                'P': ["The Magic Mountain – Thomas Mann (~700 pages)", "War and Peace – Leo Tolstoy (~1,200 pages)"]
+            }
         }
     };
 
-    const results = {
-        'r_sf': 'You should start using a face moisturizer to combat dryness.',
-        'r_sd': 'You should start drinking around 3 liters of water every day to improve skin hydration.',
-        'r_cd1': 'You are following good habits, but dryness persists. It is best to consult a dermatologist for a professional diagnosis.',
-        'r_af': 'To avoid skin reactions, you should use allergy-friendly products.',
-        'r_sb': 'Excessive oily food can affect your skin. You should start eating a more balanced diet.',
-        'r_cd2': 'Since common external factors have been ruled out, you should consult a dermatologist to identify the underlying issue.'
+    // --- STATE: To store user's choices ---
+    const userChoices = {
+        level: null,
+        length: null,
+        genre: null
     };
 
-    let currentNodeId;
+    // --- DOM Element References ---
+    const levelSection = document.getElementById('level-selection');
+    const lengthSection = document.getElementById('length-selection');
+    const genreSection = document.getElementById('genre-selection');
+    const resultsSection = document.getElementById('results');
+    const bookList = document.getElementById('book-list');
+    const resetButton = document.getElementById('reset-btn');
 
-    // 3. Core Functions
-    function startGame() {
-        startScreen.classList.add('hidden');
-        resultScreen.classList.add('hidden');
-        quizScreen.classList.remove('hidden');
-        currentNodeId = 'start';
-        displayNode(currentNodeId);
+    // --- EVENT LISTENERS (using event delegation) ---
+    levelSection.addEventListener('click', handleLevelChoice);
+    lengthSection.addEventListener('click', handleLengthChoice);
+    genreSection.addEventListener('click', handleGenreChoice);
+    resetButton.addEventListener('click', resetApp);
+
+    // --- HANDLER FUNCTIONS ---
+    function handleLevelChoice(event) {
+        if (!event.target.classList.contains('choice-btn')) return;
+
+        userChoices.level = event.target.dataset.value;
+        updateLengthOptions(userChoices.level);
+        transitionToSection(levelSection, lengthSection);
     }
 
-    function displayNode(nodeId) {
-        const node = flowchart[nodeId];
+    function handleLengthChoice(event) {
+        if (!event.target.classList.contains('choice-btn')) return;
 
-        // Check if the node ID corresponds to a question or a result
-        if (node && node.type === 'question') {
-            questionText.textContent = node.text;
+        userChoices.length = event.target.dataset.value;
+        transitionToSection(lengthSection, genreSection);
+    }
+
+    function handleGenreChoice(event) {
+        if (!event.target.classList.contains('choice-btn')) return;
+
+        userChoices.genre = event.target.dataset.value;
+        displayResults();
+        transitionToSection(genreSection, resultsSection);
+    }
+
+    // --- LOGIC FUNCTIONS ---
+
+    // Filter available length options based on chosen level
+    function updateLengthOptions(level) {
+        const validLengths = Object.keys(recommendations[level]);
+        const allLengthButtons = lengthSection.querySelectorAll('.choice-btn');
+
+        allLengthButtons.forEach(button => {
+            if (validLengths.includes(button.dataset.value)) {
+                button.classList.remove('hidden');
+            } else {
+                button.classList.add('hidden');
+            }
+        });
+    }
+
+    // Display the final results
+    function displayResults() {
+        const { level, length, genre } = userChoices;
+        const books = recommendations[level]?.[length]?.[genre];
+
+        bookList.innerHTML = ''; // Clear previous results
+
+        if (books && books.length > 0) {
+            books.forEach(bookString => {
+                const [title, author] = bookString.split(' – ');
+                const listItem = document.createElement('div');
+                listItem.className = 'book-item';
+                listItem.innerHTML = `
+                    <div class="book-title">${title}</div>
+                    <div class="book-author">${author}</div>
+                `;
+                bookList.appendChild(listItem);
+            });
         } else {
-            // If it's not a question, it must be a result ID
-            showResult(nodeId);
+            // Error message if no combination is found (for robustness)
+            const errorItem = document.createElement('div');
+            errorItem.className = 'book-item';
+            errorItem.textContent = 'Sorry, no recommendations found for this combination. Please try again.';
+            bookList.appendChild(errorItem);
         }
     }
-
-    function handleAnswer(answer) {
-        const currentNode = flowchart[currentNodeId];
-        const nextNodeId = answer ? currentNode.yes : currentNode.no;
-
-        // Add visual feedback for transition
-        quizScreen.classList.add('fade-out');
-
-        // Wait for the fade-out transition to complete before changing content
-        setTimeout(() => {
-            currentNodeId = nextNodeId;
-            displayNode(currentNodeId);
-            // Fade back in
-            quizScreen.classList.remove('fade-out');
-        }, 400); // This duration should match the CSS transition
+    
+    // Smoothly transition between sections
+    function transitionToSection(fromSection, toSection) {
+        fromSection.classList.add('hidden');
+        toSection.classList.remove('hidden');
     }
 
-    function showResult(resultId) {
-        quizScreen.classList.add('hidden');
-        resultScreen.classList.remove('hidden');
-        resultText.textContent = results[resultId];
-    }
+    // Reset the application to the start
+    function resetApp() {
+        userChoices.level = null;
+        userChoices.length = null;
+        userChoices.genre = null;
 
-    function restartGame() {
-        resultScreen.classList.add('hidden');
-        startScreen.classList.remove('hidden');
+        transitionToSection(resultsSection, levelSection);
+        // Hide other sections just in case
+        lengthSection.classList.add('hidden');
+        genreSection.classList.add('hidden');
     }
-
-    // 4. Event Listeners
-    startButton.addEventListener('click', startGame);
-    yesButton.addEventListener('click', () => handleAnswer(true));
-    noButton.addEventListener('click', () => handleAnswer(false));
-    restartButton.addEventListener('click', restartGame);
 });
