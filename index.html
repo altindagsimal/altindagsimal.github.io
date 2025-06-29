@@ -3,34 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skincare Advisor</title>
+    <title>Classic Book Recommender</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="app-container">
-        <!-- Start Screen -->
-        <div id="start-screen" class="screen">
-            <h1>Facial Skin Advisor</h1>
-            <p>Answer a few questions to get a personalized skincare recommendation based on your skin's condition.</p>
-            <button id="start-btn" class="btn btn-primary">Check My Skin</button>
-        </div>
+    <div class="container">
+        <header>
+            <h1>Which Classic Should You Read?</h1>
+            <p class="subtitle">Find your next favorite classic book in 3 simple steps.</p>
+        </header>
 
-        <!-- Quiz Screen -->
-        <div id="quiz-screen" class="screen hidden">
-            <h2 id="question-text">Is your skin dry?</h2>
-            <div class="button-group">
-                <button id="yes-btn" class="btn btn-choice">Yes</button>
-                <button id="no-btn" class="btn btn-choice">No</button>
-            </div>
-        </div>
+        <main>
+            <!-- Step 1: Reading Experience -->
+            <section id="level-selection" class="step-card">
+                <h2><span class="step-number">1</span>How would you describe your reading experience?</h2>
+                <div class="options-grid">
+                    <button class="choice-btn" data-value="B"><strong>Beginner:</strong> I'm new to classic books or I prefer simple and easy reads.</button>
+                    <button class="choice-btn" data-value="I"><strong>Intermediate:</strong> I've read a few classics before and I'm ready for more.</button>
+                    <button class="choice-btn" data-value="A"><strong>Advanced:</strong> I read many classics and am looking for something new and challenging.</button>
+                </div>
+            </section>
 
-        <!-- Result Screen -->
-        <div id="result-screen" class="screen hidden">
-            <h2>Recommendation</h2>
-            <p id="result-text">Here is your result.</p>
-            <button id="restart-btn" class="btn btn-primary">Start Over</button>
-        </div>
+            <!-- Step 2: Book Length -->
+            <section id="length-selection" class="step-card hidden">
+                <h2><span class="step-number">2</span>How long of a book would you like to read?</h2>
+                <div class="options-grid">
+                    <button class="choice-btn" data-value="U">Under 150 pages</button>
+                    <button class="choice-btn" data-value="V">150 - 300 pages</button>
+                    <button class="choice-btn" data-value="W">300 - 500 pages</button>
+                    <button class="choice-btn" data-value="Z">Over 500 pages</button>
+                </div>
+            </section>
+
+            <!-- Step 3: Story Type / Genre -->
+            <section id="genre-selection" class="step-card hidden">
+                <h2><span class="step-number">3</span>What kind of a story are you in the mood for?</h2>
+                <div class="options-grid">
+                    <button class="choice-btn" data-value="L">Love Story</button>
+                    <button class="choice-btn" data-value="D">Dramatic Story</button>
+                    <button class="choice-btn" data-value="S">Social Problems</button>
+                    <button class="choice-btn" data-value="P">Philosophical</button>
+                </div>
+            </section>
+
+            <!-- Step 4: Results -->
+            <section id="results" class="step-card hidden">
+                <h2>Your Recommended Reading:</h2>
+                <div id="book-list">
+                    <!-- Book recommendations will be injected here by JavaScript -->
+                </div>
+                <button id="reset-btn">Start Over</button>
+            </section>
+        </main>
     </div>
 
     <script src="script.js"></script>
