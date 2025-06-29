@@ -4,19 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Classic Book Recommender</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="container">
-        <header>
+        <header id="intro-section">
             <h1>Which Classic Should You Read?</h1>
             <p class="subtitle">Find your next favorite classic book in 3 simple steps.</p>
+            <button id="start-btn" class="start-button">Start Your Literary Journey</button>
         </header>
 
         <main>
             <!-- Step 1: Reading Experience -->
-            <section id="level-selection" class="step-card">
+            <section id="level-selection" class="step-card hidden">
                 <h2><span class="step-number">1</span>How would you describe your reading experience?</h2>
                 <div class="options-grid">
                     <button class="choice-btn" data-value="B"><strong>Beginner:</strong> I'm new to classic books or I prefer simple and easy reads.</button>
