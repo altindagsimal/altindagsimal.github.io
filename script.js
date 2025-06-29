@@ -4,16 +4,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const recommendations = {
         'B': { // Beginner
             'U': { // Under 150 pages
-                'L': ["Breakfast at Tiffany's – Truman Capote (~120 pages)", "A Room with a View – E.M. Forster (~140 pages)"],
-                'D': ["Of Mice and Men – John Steinbeck (~110 pages)", "Lord of the Flies – William Golding (~140 pages)"],
-                'S': ["Fahrenheit 451 – Ray Bradbury (~140 pages)", "Anthem – Ayn Rand (~100 pages)"],
-                'P': ["Siddhartha – Hermann Hesse (~120 pages)", "Demian – Hermann Hesse (~140 pages)"]
+                'L': ["The Little Prince – Antoine de Saint-Exupéry (~100 pages)", "The Kreutzer Sonata – Leo Tolstoy (~100 pages)"],
+                'D': ["The Old Man and the Sea – Ernest Hemingway (~120 pages)", "The Death of Ivan Ilyich – Tolstoy (~100 pages)"],
+                'S': ["Animal Farm – George Orwell (~110 pages)", "The Pearl – Steinbeck (~90 pages)"],
+                'P': ["The Stranger – Albert Camus (~120 pages)", "The Metamorphosis – Kafka (~60 pages)"]
             },
             'V': { // 150-300 pages
-                'L': ["The Little Prince – Antoine de Saint-Exupéry (~100 pages)", "The Kreutzer Sonata – Leo Tolstoy (~100 pages) (simple edition)"],
-                'D': ["The Old Man and the Sea – Ernest Hemingway (~120 pages)", "The Death of Ivan Ilyich – Tolstoy (~100 pages)"],
-                'S': ["Animal Farm - George Orwell (~110 pages)", "The Pearl - Steinbeck (~90 pages)"],
-                'P': ["The Stranger - Albert Camus (~120 pages)", "The Metamorphosis - Kafka (~60 pages)"]
+                'L': ["Breakfast at Tiffany's – Truman Capote (~180 pages)", "A Room with a View – E.M. Forster (~220 pages)"],
+                'D': ["Of Mice and Men – John Steinbeck (~180 pages)", "Lord of the Flies – William Golding (~200 pages)"],
+                'S': ["Fahrenheit 451 – Ray Bradbury (~190 pages)", "Anthem – Ayn Rand (~150 pages)"],
+                'P': ["Siddhartha – Hermann Hesse (~160 pages)", "Demian – Hermann Hesse (~200 pages)"]
             }
         },
         'I': { // Intermediate
@@ -48,6 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- DOM Element References ---
+    const introSection = document.getElementById('intro-section');
+    const startButton = document.getElementById('start-btn');
     const levelSection = document.getElementById('level-selection');
     const lengthSection = document.getElementById('length-selection');
     const genreSection = document.getElementById('genre-selection');
@@ -56,12 +58,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetButton = document.getElementById('reset-btn');
 
     // --- EVENT LISTENERS (using event delegation) ---
+    startButton.addEventListener('click', startApp);
     levelSection.addEventListener('click', handleLevelChoice);
     lengthSection.addEventListener('click', handleLengthChoice);
     genreSection.addEventListener('click', handleGenreChoice);
     resetButton.addEventListener('click', resetApp);
 
     // --- HANDLER FUNCTIONS ---
+    function startApp() {
+        transitionToSection(introSection, levelSection);
+    }
+
     function handleLevelChoice(event) {
         if (!event.target.classList.contains('choice-btn')) return;
 
@@ -140,8 +147,9 @@ document.addEventListener('DOMContentLoaded', () => {
         userChoices.length = null;
         userChoices.genre = null;
 
-        transitionToSection(resultsSection, levelSection);
+        transitionToSection(resultsSection, introSection);
         // Hide other sections just in case
+        levelSection.classList.add('hidden');
         lengthSection.classList.add('hidden');
         genreSection.classList.add('hidden');
     }
