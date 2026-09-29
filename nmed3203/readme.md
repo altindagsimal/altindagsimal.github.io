@@ -4,4 +4,4 @@
 #### Bilgisayarım pembe
 *aybüke* 
 **ali** 
-> şimal  
+> şimal   
