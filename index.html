@@ -1,67 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Classic Book Recommender</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reciprocal Garden — Design the Dialogue</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="app-container">
+    <header class="header">
+      <h1>The Reciprocal Garden 🌱</h1>
+      <p class="subtitle">Every drop of water expects a bloom. Design the dialogue, not the message.</p>
+    </header>
 
-    <div class="container">
-        <header id="intro-section">
-            <h1>Which Classic Should You Read?</h1>
-            <p class="subtitle">Find your next favorite classic book in 3 simple steps.</p>
-            <button id="start-btn" class="start-button">Start Your Literary Journey</button>
-        </header>
+    <main class="main-content">
+      <div class="canvas-wrapper">
+        <canvas id="gardenCanvas" aria-label="Interactive garden environment"></canvas>
+      </div>
 
-        <main>
-            <!-- Step 1: Reading Experience -->
-            <section id="level-selection" class="step-card hidden">
-                <h2><span class="step-number">1</span>How would you describe your reading experience?</h2>
-                <div class="options-grid">
-                    <button class="choice-btn" data-value="B"><strong>Beginner:</strong> I'm new to classic books or I prefer simple and easy reads.</button>
-                    <button class="choice-btn" data-value="I"><strong>Intermediate:</strong> I've read a few classics before and I'm ready for more.</button>
-                    <button class="choice-btn" data-value="A"><strong>Advanced:</strong> I read many classics and am looking for something new and challenging.</button>
-                </div>
-            </section>
+      <aside class="control-panel">
+        <div class="info-card">
+          <h2>Garden Climate State</h2>
+          <div id="stateBadge" class="state-badge flourishing">FLOURISHING</div>
+          <p id="stateDescription" class="state-desc">
+            Your care nourishes the soil! Trees are growing and flowers are blooming.
+          </p>
+        </div>
 
-            <!-- Step 2: Book Length -->
-            <section id="length-selection" class="step-card hidden">
-                <h2><span class="step-number">2</span>How long of a book would you like to read?</h2>
-                <div class="options-grid">
-                    <button class="choice-btn" data-value="U">Under 150 pages</button>
-                    <button class="choice-btn" data-value="V">150 - 300 pages</button>
-                    <button class="choice-btn" data-value="W">300 - 500 pages</button>
-                    <button class="choice-btn" data-value="Z">Over 500 pages</button>
-                </div>
-            </section>
+        <div class="instructions-card">
+          <h2>How to Tend Your Garden</h2>
+          <ul>
+            <li><strong>Click / Drag:</strong> Water the soil and plant seeds.</li>
+            <li><strong>Keyboard (A11y):</strong> Use <kbd>&uparrow;</kbd> <kbd>&downarrow;</kbd> <kbd>&leftarrow;</kbd> <kbd>&rightarrow;</kbd> arrow keys to move, and hold <kbd>Space</kbd> to water.</li>
+            <li><strong>Reset:</strong> Click <em>Reset Garden</em> or press <kbd>R</kbd> to clear the field.</li>
+          </ul>
+        </div>
 
-            <!-- Step 3: Story Type / Genre -->
-            <section id="genre-selection" class="step-card hidden">
-                <h2><span class="step-number">3</span>What kind of a story are you in the mood for?</h2>
-                <div class="options-grid">
-                    <button class="choice-btn" data-value="L">Love Story</button>
-                    <button class="choice-btn" data-value="D">Dramatic Story</button>
-                    <button class="choice-btn" data-value="S">Social Problems</button>
-                    <button class="choice-btn" data-value="P">Philosophical</button>
-                </div>
-            </section>
+        <div class="legend-card">
+          <h2>Ecosystem Dialogue</h2>
+          <div class="legend-item">
+            <span class="color-swatch participant-swatch"></span>
+            <span>Your Water Drops & Seed Planter</span>
+          </div>
+          <div class="legend-item">
+            <span class="color-swatch system-swatch"></span>
+            <span>System Response (Growing Trees & Flowers)</span>
+          </div>
+        </div>
 
-            <!-- Step 4: Results -->
-            <section id="results" class="step-card hidden">
-                <h2>Your Recommended Reading:</h2>
-                <div id="book-list">
-                    <!-- Book recommendations will be injected here by JavaScript -->
-                </div>
-                <button id="reset-btn">Start Over</button>
-            </section>
-        </main>
-    </div>
+        <div class="actions">
+          <button id="resetBtn" class="btn-reset" type="button">Reset Garden (R)</button>
+        </div>
+      </aside>
+    </main>
+  </div>
 
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
