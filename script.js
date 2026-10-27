@@ -1,156 +1,254 @@
-document.addEventListener('DOMContentLoaded', () => {
+/**
+ * THE RECIPROCAL GARDEN
+ * Architecture: DESIGN -> State -> Input -> Rule -> Output (Render)
+ */
 
-    // --- DATA: All book recommendations based on the flowchart ---
-    const recommendations = {
-        'B': { // Beginner
-            'U': { // Under 150 pages
-                'L': ["The Little Prince – Antoine de Saint-Exupéry (~100 pages)", "The Kreutzer Sonata – Leo Tolstoy (~100 pages)"],
-                'D': ["The Old Man and the Sea – Ernest Hemingway (~120 pages)", "The Death of Ivan Ilyich – Tolstoy (~100 pages)"],
-                'S': ["Animal Farm – George Orwell (~110 pages)", "The Pearl – Steinbeck (~90 pages)"],
-                'P': ["The Stranger – Albert Camus (~120 pages)", "The Metamorphosis – Kafka (~60 pages)"]
-            },
-            'V': { // 150-300 pages
-                'L': ["Breakfast at Tiffany's – Truman Capote (~180 pages)", "A Room with a View – E.M. Forster (~220 pages)"],
-                'D': ["Of Mice and Men – John Steinbeck (~180 pages)", "Lord of the Flies – William Golding (~200 pages)"],
-                'S': ["Fahrenheit 451 – Ray Bradbury (~190 pages)", "Anthem – Ayn Rand (~150 pages)"],
-                'P': ["Siddhartha – Hermann Hesse (~160 pages)", "Demian – Hermann Hesse (~200 pages)"]
-            }
-        },
-        'I': { // Intermediate
-            'V': { // 150-300 pages
-                'L': ["Madame Bovary – Gustave Flaubert (~250 pages)", "A Room with a View – E.M. Forster (~220 pages)"],
-                'D': ["The Bell Jar – Sylvia Plath (~250 pages)", "The Catcher in the Rye – J.D. Salinger (~230 pages)"],
-                'S': ["The Trial – Franz Kafka (~240 pages)", "Native Son – Richard Wright (abridged) (~280 pages)"],
-                'P': ["Demian – Hermann Hesse (~250 pages)", "Steppenwolf – Hermann Hesse (simplified) (~270 pages)"]
-            },
-            'W': { // 300-500 pages
-                'L': ["The Age of Innocence – Edith Wharton (~320 pages)", "Jane Eyre – Charlotte Brontë (~400 pages)"],
-                'D': ["Crime and Punishment – Dostoyevsky (~430 pages)", "Jude the Obscure – Thomas Hardy (~450 pages)"],
-                'S': ["The Grapes of Wrath – John Steinbeck (~470 pages)", "Oliver Twist – Charles Dickens (~430 pages)"],
-                'P': ["The Plague – Albert Camus (~320 pages)", "Brave New World – Aldous Huxley (~300 pages)"]
-            }
-        },
-        'A': { // Advanced
-            'Z': { // Over 500 pages
-                'L': ["Anna Karenina – Leo Tolstoy (abridged version) (~500 pages)", "Wuthering Heights – Emily Brontë (~400 pages)"],
-                'D': ["The Brothers Karamazov – Dostoyevsky (~800+ in most editions)", "The Idiot – Dostoyevsky (~500 pages)"],
-                'S': ["Bleak House – Charles Dickens (~500 pages)", "Les Misérables – Victor Hugo (partial edition) (~480 pages)"],
-                'P': ["The Magic Mountain – Thomas Mann (~700 pages)", "War and Peace – Leo Tolstoy (~1,200 pages)"]
-            }
-        }
-    };
+// ==========================================
+// 1. DESIGN: Ayarlanabilir Tasarım Parametreleri
+// ==========================================
+const DESIGN = {
+  colors: {
+    sky: '#e2e8f0',
+    soil: '#8d6e63',
+    soilWatered: '#5d4037',
+    waterDrop: '#42a5f5',
+    treeTrunk: '#4e342e',
+    foliage: '#2e7d32',
+    flowerPetals: ['#e91e63', '#ffeb3b', '#9c27b0', '#ff9800']
+  },
+  
+  // Sistem Kuralları ve Hafıza Parametreleri
+  waterThreshold: 12,       // Toprağın canlı kalması için gereken ortalama sulama miktarı
+  idleTimeoutMs: 700,       // Katılımcı durduğunda rüzgar/dinlenme moduna geçiş süresi
+  maxTrees: 25,             // Bahçede aynı anda büyüyebilecek maksimum ağaç
+  keyboardStep: 12          // Klavye imleç hızı
+};
 
-    // --- STATE: To store user's choices ---
-    const userChoices = {
-        level: null,
-        length: null,
-        genre: null
-    };
+// ==========================================
+// 2. STATE: Bahçe Durumu
+// ==========================================
+const state = {
+  currentMode: 'FLOURISHING', // 'FLOURISHING' | 'DRY' | 'RESTING'
+  waterDrops: [],             // Kullanıcının attığı su damlaları
+  plants: [],                 // Sistemin yetiştirdiği çiçekler ve ağaçlar {x, y, size, type, maxProps}
+  recentWatering: [],         // Sulama geçmişi
+  
+  isWatering: false,
+  lastInputTime: Date.now(),
+  keyboardCursor: { x: 0, y: 0 },
+  keysPressed: {}
+};
 
-    // --- DOM Element References ---
-    const introSection = document.getElementById('intro-section');
-    const startButton = document.getElementById('start-btn');
-    const levelSection = document.getElementById('level-selection');
-    const lengthSection = document.getElementById('length-selection');
-    const genreSection = document.getElementById('genre-selection');
-    const resultsSection = document.getElementById('results');
-    const bookList = document.getElementById('book-list');
-    const resetButton = document.getElementById('reset-btn');
+// Canvas ve DOM Kurulumu
+const canvas = document.getElementById('gardenCanvas');
+const ctx = canvas.getContext('2d');
+const stateBadge = document.getElementById('stateBadge');
+const stateDescription = document.getElementById('stateDescription');
+const resetBtn = document.getElementById('resetBtn');
 
-    // --- EVENT LISTENERS (using event delegation) ---
-    startButton.addEventListener('click', startApp);
-    levelSection.addEventListener('click', handleLevelChoice);
-    lengthSection.addEventListener('click', handleLengthChoice);
-    genreSection.addEventListener('click', handleGenreChoice);
-    resetButton.addEventListener('click', resetApp);
+function resizeCanvas() {
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width;
+  canvas.height = Math.max(rect.height, 500);
+  if (state.keyboardCursor.x === 0) {
+    state.keyboardCursor = { x: canvas.width / 2, y: canvas.height - 80 };
+  }
+  render();
+}
 
-    // --- HANDLER FUNCTIONS ---
-    function startApp() {
-        transitionToSection(introSection, levelSection);
-    }
+window.addEventListener('resize', resizeCanvas);
 
-    function handleLevelChoice(event) {
-        if (!event.target.classList.contains('choice-btn')) return;
+// ==========================================
+// 3. INPUT: Sulama ve Tohum Ekme Girdileri
+// ==========================================
+function waterSoil(x, y) {
+  // Sadece toprağın olduğu alt bölgeye sulama yapılmasına izin ver
+  const soilY = Math.max(canvas.height - 120, y);
+  
+  const drop = { x, y: soilY, size: Math.random() * 4 + 3 };
+  state.waterDrops.push(drop);
+  state.recentWatering.push({ x, y: soilY, time: Date.now() });
 
-        userChoices.level = event.target.dataset.value;
-        updateLengthOptions(userChoices.level);
-        transitionToSection(levelSection, lengthSection);
-    }
+  if (state.recentWatering.length > 30) {
+    state.recentWatering.shift();
+  }
 
-    function handleLengthChoice(event) {
-        if (!event.target.classList.contains('choice-btn')) return;
+  state.lastInputTime = Date.now();
+  evaluateRulesAndGrowGarden(x, soilY);
+  render();
+}
 
-        userChoices.length = event.target.dataset.value;
-        transitionToSection(lengthSection, genreSection);
-    }
-
-    function handleGenreChoice(event) {
-        if (!event.target.classList.contains('choice-btn')) return;
-
-        userChoices.genre = event.target.dataset.value;
-        displayResults();
-        transitionToSection(genreSection, resultsSection);
-    }
-
-    // --- LOGIC FUNCTIONS ---
-
-    // Filter available length options based on chosen level
-    function updateLengthOptions(level) {
-        const validLengths = Object.keys(recommendations[level]);
-        const allLengthButtons = lengthSection.querySelectorAll('.choice-btn');
-
-        allLengthButtons.forEach(button => {
-            if (validLengths.includes(button.dataset.value)) {
-                button.classList.remove('hidden');
-            } else {
-                button.classList.add('hidden');
-            }
-        });
-    }
-
-    // Display the final results
-    function displayResults() {
-        const { level, length, genre } = userChoices;
-        const books = recommendations[level]?.[length]?.[genre];
-
-        bookList.innerHTML = ''; // Clear previous results
-
-        if (books && books.length > 0) {
-            books.forEach(bookString => {
-                const [title, author] = bookString.split(' – ');
-                const listItem = document.createElement('div');
-                listItem.className = 'book-item';
-                listItem.innerHTML = `
-                    <div class="book-title">${title}</div>
-                    <div class="book-author">${author}</div>
-                `;
-                bookList.appendChild(listItem);
-            });
-        } else {
-            // Error message if no combination is found (for robustness)
-            const errorItem = document.createElement('div');
-            errorItem.className = 'book-item';
-            errorItem.textContent = 'Sorry, no recommendations found for this combination. Please try again.';
-            bookList.appendChild(errorItem);
-        }
-    }
-    
-    // Smoothly transition between sections
-    function transitionToSection(fromSection, toSection) {
-        fromSection.classList.add('hidden');
-        toSection.classList.remove('hidden');
-    }
-
-    // Reset the application to the start
-    function resetApp() {
-        userChoices.level = null;
-        userChoices.length = null;
-        userChoices.genre = null;
-
-        transitionToSection(resultsSection, introSection);
-        // Hide other sections just in case
-        levelSection.classList.add('hidden');
-        lengthSection.classList.add('hidden');
-        genreSection.classList.add('hidden');
-    }
+canvas.addEventListener('mousedown', (e) => {
+  state.isWatering = true;
+  const rect = canvas.getBoundingClientRect();
+  waterSoil(e.clientX - rect.left, e.clientY - rect.top);
 });
+
+canvas.addEventListener('mousemove', (e) => {
+  if (!state.isWatering) return;
+  const rect = canvas.getBoundingClientRect();
+  waterSoil(e.clientX - rect.left, e.clientY - rect.top);
+});
+
+window.addEventListener('mouseup', () => { state.isWatering = false; });
+
+canvas.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  state.isWatering = true;
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches[0];
+  waterSoil(touch.clientX - rect.left, touch.clientY - rect.top);
+}, { passive: false });
+
+canvas.addEventListener('touchmove', (e) => {
+  if (!state.isWatering) return;
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches[0];
+  waterSoil(touch.clientX - rect.left, touch.clientY - rect.top);
+}, { passive: false });
+
+window.addEventListener('touchend', () => { state.isWatering = false; });
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'r' || e.key === 'R') {
+    resetGarden();
+    return;
+  }
+  state.keysPressed[e.key] = true;
+});
+
+window.addEventListener('keyup', (e) => { state.keysPressed[e.key] = false; });
+
+function handleKeyboardInput() {
+  let moved = false;
+  if (state.keysPressed['ArrowUp']) { state.keyboardCursor.y -= DESIGN.keyboardStep; moved = true; }
+  if (state.keysPressed['ArrowDown']) { state.keyboardCursor.y += DESIGN.keyboardStep; moved = true; }
+  if (state.keysPressed['ArrowLeft']) { state.keyboardCursor.x -= DESIGN.keyboardStep; moved = true; }
+  if (state.keysPressed['ArrowRight']) { state.keyboardCursor.x += DESIGN.keyboardStep; moved = true; }
+
+  state.keyboardCursor.x = Math.max(0, Math.min(canvas.width, state.keyboardCursor.x));
+  state.keyboardCursor.y = Math.max(canvas.height - 120, Math.min(canvas.height, state.keyboardCursor.y));
+
+  if (moved && state.keysPressed[' ']) {
+    waterSoil(state.keyboardCursor.x, state.keyboardCursor.y);
+  }
+}
+
+resetBtn.addEventListener('click', resetGarden);
+
+function resetGarden() {
+  state.waterDrops = [];
+  state.plants = [];
+  state.recentWatering = [];
+  state.currentMode = 'FLOURISHING';
+  updateUIState('FLOURISHING', 'Your care nourishes the soil! Trees are growing and flowers are blooming.');
+  render();
+}
+
+// ==========================================
+// 4. RULE: Doğanın Karşılık Verme Mantığı
+// ==========================================
+function evaluateRulesAndGrowGarden(x, y) {
+  const waterCount = state.recentWatering.length;
+
+  if (waterCount >= DESIGN.waterThreshold) {
+    setMode('FLOURISHING', 'Your care nourishes the soil! Trees are growing and flowers are blooming.');
+    
+    // Yeterli su varsa yeni ağaç veya çiçek büyüt
+    if (Math.random() < 0.3 && state.plants.length < DESIGN.maxTrees) {
+      const type = Math.random() > 0.4 ? 'tree' : 'flower';
+      const color = DESIGN.colors.flowerPetals[Math.floor(Math.random() * DESIGN.colors.flowerPetals.length)];
+      state.plants.push({ x, y, size: 5, targetSize: Math.random() * 30 + 25, type, color });
+    }
+  } else {
+    setMode('DRY', 'The soil needs more water! Growth slows down.');
+  }
+
+  // Mevcut bitkileri büyüt
+  state.plants.forEach(plant => {
+    if (plant.size < plant.targetSize) {
+      plant.size += 1.5;
+    }
+  });
+}
+
+setInterval(() => {
+  const timeSinceLastInput = Date.now() - state.lastInputTime;
+  if (timeSinceLastInput > DESIGN.idleTimeoutMs && state.plants.length > 0) {
+    if (state.currentMode !== 'RESTING') {
+      setMode('RESTING', 'The garden is resting under the soft breeze.');
+    }
+  }
+}, 400);
+
+function setMode(mode, description) {
+  if (state.currentMode !== mode) {
+    state.currentMode = mode;
+    updateUIState(mode, description);
+  }
+}
+
+function updateUIState(mode, description) {
+  stateBadge.textContent = mode;
+  stateBadge.className = `state-badge ${mode.toLowerCase()}`;
+  stateDescription.textContent = description;
+}
+
+// ==========================================
+// 5. OUTPUT: Görselleştirme ve Çizim
+// ==========================================
+function render() {
+  // Gökyüzü ve Arka Plan
+  ctx.fillStyle = DESIGN.colors.sky;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Toprak Katmanı
+  const soilTop = canvas.height - 100;
+  ctx.fillStyle = state.recentWatering.length > 10 ? DESIGN.colors.soilWatered : DESIGN.colors.soil;
+  ctx.fillRect(0, soilTop, canvas.width, 100);
+
+  // Su Damlaları
+  state.waterDrops.forEach(drop => {
+    ctx.beginPath();
+    ctx.fillStyle = DESIGN.colors.waterDrop;
+    ctx.arc(drop.x, drop.y, drop.size, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // Büyüyen Ağaçlar ve Çiçekler (Sistemin Yanıtı)
+  state.plants.forEach(plant => {
+    if (plant.type === 'tree') {
+      // Gövde
+      ctx.fillStyle = DESIGN.colors.treeTrunk;
+      ctx.fillRect(plant.x - plant.size / 6, plant.y - plant.size, plant.size / 3, plant.size);
+      // Yapraklar
+      ctx.beginPath();
+      ctx.fillStyle = DESIGN.colors.foliage;
+      ctx.arc(plant.x, plant.y - plant.size, plant.size / 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // Çiçek Sapı
+      ctx.beginPath();
+      ctx.strokeStyle = '#2e7d32';
+      ctx.lineWidth = 3;
+      ctx.moveTo(plant.x, plant.y);
+      ctx.lineTo(plant.x, plant.y - plant.size);
+      ctx.stroke();
+
+      // Çiçek Taç Yaprakları
+      ctx.beginPath();
+      ctx.fillStyle = plant.color;
+      ctx.arc(plant.x, plant.y - plant.size, plant.size / 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+}
+
+function loop() {
+  handleKeyboardInput();
+  requestAnimationFrame(loop);
+}
+
+resizeCanvas();
+loop();
