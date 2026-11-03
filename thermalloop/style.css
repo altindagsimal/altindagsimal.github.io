@@ -1,0 +1,208 @@
+/* High Contrast Instrument & Laboratory Aesthetic */
+:root {
+  --bg-color: #121418;
+  --panel-bg: #1e222a;
+  --text-main: #f0f2f5;
+  --text-muted: #a0a6b2;
+  --border-color: #343b48;
+  
+  --color-heat: #ff6b35;
+  --color-cool: #4cc9f0;
+  --color-target: #2ec4b6;
+  --color-warning: #e71d36;
+
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 680px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.app-header h1 {
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+.app-header .subtitle {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+.controls-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0,0,0,0.2);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.mode-toggle label {
+  font-size: 0.85rem;
+  margin-right: 8px;
+}
+
+select {
+  background: var(--bg-color);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btn {
+  font-family: inherit;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary {
+  background: var(--border-color);
+  color: var(--text-main);
+  padding: 8px 14px;
+  font-size: 0.85rem;
+}
+
+.btn-secondary:hover {
+  background: #454f60;
+}
+
+.simulation-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.canvas-wrapper {
+  width: 100%;
+  background: #0d0e11;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.action-area {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-heat {
+  width: 100%;
+  max-width: 320px;
+  height: 64px;
+  background: var(--border-color);
+  color: var(--text-main);
+  border: 2px solid var(--color-heat);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.btn-heat:active, .btn-heat.is-pressed {
+  background: var(--color-heat);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+  transform: scale(0.98);
+}
+
+.btn-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.btn-subtext {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.status-panel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.status-card {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.status-card .label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.status-card .value {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.state-neutral { color: var(--text-main); }
+.state-target { color: var(--color-target); }
+.state-over { color: var(--color-warning); }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
