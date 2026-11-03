@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#080a18" />
+  <title>ECHO — The Past Follows You</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="wordmark" href="#" aria-label="Echo home">ECHO<span>.</span></a>
+      <div class="topbar-note">A TEMPORAL EXPERIMENT</div>
+      <div class="top-actions">
+        <button class="button button-quiet" id="pauseButton" type="button" disabled>PAUSE <span class="button-key">P</span></button>
+        <button class="button button-quiet" id="resetButton" type="button">RESET <span class="button-key">R</span></button>
+      </div>
+    </header>
+
+    <section class="intro-row" aria-label="Experience introduction">
+      <div>
+        <p class="eyebrow">INTERACTION / MEMORY / TIME</p>
+        <h1>The past<br /><em>follows you.</em></h1>
+      </div>
+      <p class="intro-copy">Move through the space. Four seconds later, your past self will follow the path you made.</p>
+    </section>
+
+    <section class="game-frame" aria-label="ECHO game">
+      <div class="game-meta">
+        <span><i class="status-dot" id="statusDot"></i><span id="statusText">READY</span></span>
+        <span class="delay-label">MEMORY DELAY <strong id="delayValue">04.0s</strong></span>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="gameCanvas" aria-label="Game area. Use arrow keys or WASD to move the blue player. A purple echo repeats your movements four seconds later."></canvas>
+        <div class="screen-overlay" id="screenOverlay">
+          <div class="overlay-card">
+            <div class="overlay-mark">E<span>↗</span></div>
+            <p class="eyebrow" id="overlayEyebrow">A STUDY OF TEMPORALITY</p>
+            <h2 id="overlayTitle">Make a move.<br /><em>Meet your past.</em></h2>
+            <p id="overlayMessage">Your movements are remembered. In four seconds, an echo will replay them.</p>
+            <button class="button button-primary" id="playButton" type="button">START EXPERIENCE <span>→</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="game-footer">
+        <div class="elapsed"><span class="footer-label">TIME IN MOTION</span><strong id="elapsedTime">00:00</strong></div>
+        <div class="legend">
+          <span><i class="legend-player"></i>YOU <small>PRESENT</small></span>
+          <span><i class="legend-ghost"></i>ECHO <small>PAST · −4s</small></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="below-grid">
+      <div class="instructions">
+        <p class="eyebrow">HOW TO INTERACT</p>
+        <div class="instruction-line"><span class="keycap">W</span><span class="keycap">A</span><span class="keycap">S</span><span class="keycap">D</span><span class="keycap">↑</span><span class="keycap">←</span><span class="keycap">↓</span><span class="keycap">→</span><p>Move your character</p></div>
+        <p class="small-note">You can also use the directional pad on touch screens. Press P to pause and R to reset.</p>
+      </div>
+      <div class="touch-controls" aria-label="Touch movement controls">
+        <button class="touch-key touch-up" data-direction="up" aria-label="Move up">↑</button>
+        <button class="touch-key touch-left" data-direction="left" aria-label="Move left">←</button>
+        <button class="touch-key touch-down" data-direction="down" aria-label="Move down">↓</button>
+        <button class="touch-key touch-right" data-direction="right" aria-label="Move right">→</button>
+      </div>
+      <div class="concept-note">
+        <p class="eyebrow">THE IDEA</p>
+        <p>Your past actions don't disappear. They return, sharing the same space as the present.</p>
+      </div>
+    </section>
+    <footer class="page-footer"><span> ECHO / TEMPORALITY STUDY</span><span>EVERY ACTION LEAVES A TRACE.</span></footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
