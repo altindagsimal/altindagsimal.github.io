@@ -1,1 +1,522 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Thermal Loop - Thermostat Latency Simulator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-container">
+    <header class="app-header">
+      <h1>The Thermal Loop</h1>
+      <p class="subtitle">Exploring Feedback: Thermal Inertia &amp; Hidden Momentum</p>
+    </header>
+
+    <section class="controls-panel">
+      <div class="mode-toggle">
+        <label for="conditionSelect"><strong>Feedback Mode:</strong></label>
+        <select id="conditionSelect" aria-label="Select Feedback Condition">
+          <option value="B">Condition B: Predictive Momentum Waves (Hidden State Visible)</option>
+          <option value="A">Condition A: Standard Temperature Only (Hidden State Masked)</option>
+        </select>
+      </div>
+
+      <div class="button-group">
+        <button id="resetBtn" class="btn btn-secondary" type="button">Reset Simulation</button>
+      </div>
+    </section>
+
+    <section class="simulation-area">
+      <!-- Main Canvas for Displaying Temperature Gauge and Momentum Waves -->
+      <div class="canvas-wrapper">
+        <canvas id="simCanvas" width="600" height="400" aria-label="Thermal Loop Gauge Display" role="img"></canvas>
+      </div>
+
+      <!-- Action Area -->
+      <div class="action-area">
+        <button id="heatBtn" class="btn btn-heat" type="button" aria-describedby="heatHelp">
+          <span class="btn-label">HOLD TO HEAT</span>
+          <span class="btn-subtext">(Spacebar or Touch)</span>
+        </button>
+        <p id="heatHelp" class="sr-only">Press and hold this button or spacebar to add thermal power to the system.</p>
+      </div>
+    </section>
+
+    <!-- Accessible Status Panel for Screen Readers & Quick Reading -->
+    <section class="status-panel" aria-live="polite">
+      <div class="status-card">
+        <span class="label">CURRENT TEMP</span>
+        <span id="tempValue" class="value">20.0 °C</span>
+      </div>
+      <div class="status-card">
+        <span class="label">TARGET RANGE</span>
+        <span class="value">22.0 °C - 24.0 °C</span>
+      </div>
+      <div class="status-card">
+        <span class="label">SYSTEM STATE</span>
+        <span id="systemStateText" class="value state-neutral">IN BALANCE</span>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
+/**
+ * THE THERMAL LOOP - THERMOSTAT LATENCY SIMULATOR
+ * Visualizing Hidden Thermal Momentum and Latency
+ */
+
+// ============================================================================
+// 1. DESIGN OBJECT (Ayar Parametreleri ve Kurallar)
+// ============================================================================
+const DESIGN = {
+  // Fiziksel Model Parametreleri (Physics Constants)
+  initialTemp: 18.0,        // Başlangıç sıcaklığı (°C)
+  targetMin: 22.0,          // Hedef bölge alt sınırı (°C)
+  targetMax: 24.0,          // Hedef bölge üst sınırı (°C)
+  heatPower: 0.08,          // Isıtıcı basılı tutulduğunda eklenen ivme katsayısı
+  ambientCooling: 0.015,    // Çevreye doğal ısı kaybı (soğuma ivmesi)
+  inertiaDamping: 0.94,     // Sürtünme/Direnç katsayısı (İvmenin zamanla yavaşlaması)
+
+  // Görsel & Doku Ayarları (Visual Language & Density)
+  baseRadius: 70,           // Merkez gösterge halkasının temel yarıçapı
+  maxWaveAmplitude: 25,     // Maksimum ivmede dalga yüksekliği
+  particleCount: 24,        // İvme yoğunluğunu temsil eden parçacık sayısı
+  
+  // Renk Kodları (Color Palette)
+  colors: {
+    bg: '#0d0e11',
+    gaugeTrack: '#2a2e37',
+    targetZone: '#2ec4b6',
+    cold: '#4cc9f0',
+    heat: '#ff6b35',
+    overshoot: '#e71d36',
+    text: '#f0f2f5'
+  }
+};
+
+// ============================================================================
+// 2. STATE OBJECT (Sistem Durumu)
+// ============================================================================
+const state = {
+  currentTemp: DESIGN.initialTemp, // Anlık sıcaklık (T)
+  momentum: 0.0,                   // Gizli durum: Isıl İvme / Hız (v)
+  isHeating: false,                // Isıtıcı açık mı?
+  condition: 'B',                  // Feedback Modu: 'A' (Standard) veya 'B' (Momentum Waves)
+  time: 0                          // Animasyon zaman değişkeni
+};
+
+// ============================================================================
+// 3. INPUT HANDLING (Girdi Yönetimi)
+// ============================================================================
+const heatBtn = document.getElementById('heatBtn');
+const resetBtn = document.getElementById('resetBtn');
+const conditionSelect = document.getElementById('conditionSelect');
+
+function setHeating(active) {
+  state.isHeating = active;
+  if (active) {
+    heatBtn.classList.add('is-pressed');
+  } else {
+    heatBtn.classList.remove('is-pressed');
+  }
+}
+
+// Pointer & Touch Events (Hold to Heat)
+heatBtn.addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  setHeating(true);
+});
+
+window.addEventListener('pointerup', () => setHeating(false));
+window.addEventListener('pointercancel', () => setHeating(false));
+window.addEventListener('blur', () => setHeating(false));
+
+// Keyboard Accessibility (Spacebar Hold)
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'Space' && !e.repeat && document.activeElement !== resetBtn && document.activeElement !== conditionSelect) {
+    e.preventDefault();
+    setHeating(true);
+  }
+});
+
+window.addEventListener('keyup', (e) => {
+  if (e.code === 'Space') {
+    e.preventDefault();
+    setHeating(false);
+  }
+});
+
+// Reset Control
+resetBtn.addEventListener('click', () => {
+  state.currentTemp = DESIGN.initialTemp;
+  state.momentum = 0.0;
+  state.isHeating = false;
+  setHeating(false);
+});
+
+// Condition Selector
+conditionSelect.addEventListener('change', (e) => {
+  state.condition = e.target.value;
+});
+
+// ============================================================================
+// 4. RULE / SIMULATION LOGIC (Fizik Döngüsü)
+// ============================================================================
+function updateSimulation() {
+  state.time += 0.05;
+
+  // Rule 1: Isıtıcı açıkken ivme artar
+  if (state.isHeating) {
+    state.momentum += DESIGN.heatPower;
+  }
+
+  // Rule 2: Çevre soğuma etkisi
+  state.momentum -= DESIGN.ambientCooling;
+
+  // Rule 3: Sürtünme ve eylemsizlik sönümlenmesi
+  state.momentum *= DESIGN.inertiaDamping;
+
+  // Rule 4: Sıcaklık ivmeye bağlı olarak güncellenir (T_next = T + v)
+  state.currentTemp += state.momentum;
+
+  // Sınır koruması (Alt limit)
+  if (state.currentTemp < 10) {
+    state.currentTemp = 10;
+    state.momentum = 0;
+  }
+}
+
+// ============================================================================
+// 5. OUTPUT / RENDER LOGIC (Çizim ve Arayüz Güncelleme)
+// ============================================================================
+const canvas = document.getElementById('simCanvas');
+const ctx = canvas.getContext('2d');
+
+const tempValueEl = document.getElementById('tempValue');
+const systemStateTextEl = document.getElementById('systemStateText');
+
+function renderUI() {
+  // 1. Text & DOM Updates
+  tempValueEl.textContent = `${state.currentTemp.toFixed(1)} °C`;
+
+  if (state.currentTemp >= DESIGN.targetMin && state.currentTemp <= DESIGN.targetMax) {
+    systemStateTextEl.textContent = "IN TARGET ZONE";
+    systemStateTextEl.className = "value state-target";
+  } else if (state.currentTemp > DESIGN.targetMax) {
+    systemStateTextEl.textContent = "OVERSHOOT (HOT)";
+    systemStateTextEl.className = "value state-over";
+  } else {
+    systemStateTextEl.textContent = "BELOW TARGET";
+    systemStateTextEl.className = "value state-neutral";
+  }
+
+  // 2. Canvas Rendering
+  const width = canvas.width;
+  const height = canvas.height;
+  const centerX = width / 2;
+  const centerY = height / 2;
+
+  ctx.clearRect(0, 0, width, height);
+
+  // Background Dial Arc (15°C to 30°C range mapped to arcs)
+  const startAngle = Math.PI * 0.8;
+  const endAngle = Math.PI * 2.2;
+  const totalArc = endAngle - startAngle;
+
+  // Base Track
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, DESIGN.baseRadius, startAngle, endAngle);
+  ctx.strokeStyle = DESIGN.colors.gaugeTrack;
+  ctx.lineWidth = 14;
+  ctx.lineCap = 'round';
+  ctx.stroke();
+
+  // Target Range Highlight
+  const targetStart = startAngle + ((DESIGN.targetMin - 10) / 20) * totalArc;
+  const targetEnd = startAngle + ((DESIGN.targetMax - 10) / 20) * totalArc;
+
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, DESIGN.baseRadius, targetStart, targetEnd);
+  ctx.strokeStyle = DESIGN.colors.targetZone;
+  ctx.lineWidth = 14;
+  ctx.stroke();
+
+  // Current Temperature Arc Position
+  const tempRatio = Math.max(0, Math.min(1, (state.currentTemp - 10) / 20));
+  const currentAngle = startAngle + tempRatio * totalArc;
+
+  // ==========================================================================
+  // CONDITION B: GİZLİ DURUMUN GÖRSELLEŞTİRİLMESİ (DYNAMIC WAVES & DENSITY)
+  // ==========================================================================
+  if (state.condition === 'B') {
+    const momentumAbs = Math.abs(state.momentum);
+    const waveFreq = 8 + momentumAbs * 30; // İvme arttıkça dalga sıklaşır
+    const waveAmp = Math.min(DESIGN.maxWaveAmplitude, momentumAbs * 45); // Dalga yüksekliği
+
+    // Inner Wave Ring representing Hidden Thermal Velocity
+    ctx.beginPath();
+    for (let a = 0; a < Math.PI * 2; a += 0.05) {
+      // Sinusoidal wave distortion based on momentum and time
+      const rOffset = Math.sin(a * waveFreq + state.time * 10) * waveAmp;
+      const r = (DESIGN.baseRadius - 28) + rOffset;
+      const x = centerX + Math.cos(a) * r;
+      const y = centerY + Math.sin(a) * r;
+
+      if (a === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = state.momentum >= 0 ? DESIGN.colors.heat : DESIGN.colors.cold;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Particle Clusters Density (Daha hızlı ivmede daha yoğun noktalar)
+    if (momentumAbs > 0.01) {
+      ctx.fillStyle = state.momentum >= 0 ? DESIGN.colors.heat : DESIGN.colors.cold;
+      for (let i = 0; i < DESIGN.particleCount; i++) {
+        const pAngle = (i / DESIGN.particleCount) * Math.PI * 2 + state.time;
+        const pDist = (DESIGN.baseRadius - 28) + Math.sin(i + state.time * 5) * waveAmp;
+        const px = centerX + Math.cos(pAngle) * pDist;
+        const py = centerY + Math.sin(pAngle) * pDist;
+
+        ctx.beginPath();
+        ctx.arc(px, py, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+
+  // Pointer / Indicator Needle
+  const pointerX = centerX + Math.cos(currentAngle) * DESIGN.baseRadius;
+  const pointerY = centerY + Math.sin(currentAngle) * DESIGN.baseRadius;
+
+  ctx.beginPath();
+  ctx.arc(pointerX, pointerY, 10, 0, Math.PI * 2);
+  ctx.fillStyle = state.currentTemp > DESIGN.targetMax ? DESIGN.colors.overshoot : DESIGN.colors.text;
+  ctx.fill();
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = DESIGN.colors.bg;
+  ctx.stroke();
+}
+
+// Main Simulation & Animation Loop
+function loop() {
+  updateSimulation();
+  renderUI();
+  requestAnimationFrame(loop);
+}
+
+// Start loop
+requestAnimationFrame(loop);
+/* High Contrast Instrument & Laboratory Aesthetic */
+:root {
+  --bg-color: #121418;
+  --panel-bg: #1e222a;
+  --text-main: #f0f2f5;
+  --text-muted: #a0a6b2;
+  --border-color: #343b48;
+  
+  --color-heat: #ff6b35;
+  --color-cool: #4cc9f0;
+  --color-target: #2ec4b6;
+  --color-warning: #e71d36;
+
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 680px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.app-header h1 {
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+.app-header .subtitle {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+.controls-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0,0,0,0.2);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.mode-toggle label {
+  font-size: 0.85rem;
+  margin-right: 8px;
+}
+
+select {
+  background: var(--bg-color);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btn {
+  font-family: inherit;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary {
+  background: var(--border-color);
+  color: var(--text-main);
+  padding: 8px 14px;
+  font-size: 0.85rem;
+}
+
+.btn-secondary:hover {
+  background: #454f60;
+}
+
+.simulation-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.canvas-wrapper {
+  width: 100%;
+  background: #0d0e11;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.action-area {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-heat {
+  width: 100%;
+  max-width: 320px;
+  height: 64px;
+  background: var(--border-color);
+  color: var(--text-main);
+  border: 2px solid var(--color-heat);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.btn-heat:active, .btn-heat.is-pressed {
+  background: var(--color-heat);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+  transform: scale(0.98);
+}
+
+.btn-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.btn-subtext {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.status-panel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.status-card {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.status-card .label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.status-card .value {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.state-neutral { color: var(--text-main); }
+.state-target { color: var(--color-target); }
+.state-over { color: var(--color-warning); }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
