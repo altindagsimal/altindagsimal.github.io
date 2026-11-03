@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Last Train — Temporality Experiment</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="eyebrow">A TEMPORALITY EXPERIMENT</span>
+        <h1>THE LAST TRAIN</h1>
+      </div>
+      <div class="clock-panel">
+        <span class="eyebrow">NEXT DEPARTURE</span>
+        <strong id="clock">00:35</strong>
+      </div>
+    </header>
+
+    <section class="game-shell" aria-label="Train station game">
+      <div class="sky">
+        <div class="moon"></div>
+        <div class="stars" aria-hidden="true">✦　 ·　 ✧　　 ·　 ✦　　　✧　 ·</div>
+        <div class="distant-city"></div>
+        <div class="station-roof"></div>
+        <div class="station-sign">PLATFORM <b>02</b></div>
+        <div class="sign-small">DEPARTURES</div>
+        <div class="schedule-board">
+          <span>LAST SERVICE</span>
+          <b id="board-time">00:35</b>
+          <small id="board-status">ON TIME</small>
+        </div>
+      </div>
+
+      <div class="platform">
+        <div class="platform-edge"></div>
+        <div class="yellow-line"></div>
+        <div class="platform-text">PLEASE STAND BEHIND THE YELLOW LINE</div>
+        <div class="bench"><i></i><i></i><i></i></div>
+        <div class="lamp lamp-one"><i></i></div>
+        <div class="lamp lamp-two"><i></i></div>
+        <div class="train" id="train" aria-hidden="true">
+          <div class="train-front"></div>
+          <div class="train-windows"><i></i><i></i><i></i><i></i></div>
+          <div class="train-door" id="train-door"><span></span></div>
+          <div class="train-lights"></div>
+        </div>
+        <div class="player" id="player" aria-label="Your character">
+          <div class="player-head"></div>
+          <div class="player-body"></div>
+          <div class="player-bag"></div>
+          <div class="player-shadow"></div>
+        </div>
+        <div class="boarding-marker" id="boarding-marker">BOARD HERE</div>
+      </div>
+
+      <div class="message" id="message" role="status">
+        <span class="message-dot"></span>
+        <span id="message-text">The platform is quiet. The train arrives soon.</span>
+      </div>
+    </section>
+
+    <section class="controls-panel">
+      <div class="instructions">
+        <h2>MAKE IT IN TIME</h2>
+        <p>Move along the platform. When the train arrives, reach the open door and board before it leaves.</p>
+        <div class="key-hints">
+          <span><kbd>←</kbd> <kbd>→</kbd> MOVE</span>
+          <span><kbd>SPACE</kbd> BOARD</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="pause-btn" class="secondary">PAUSE</button>
+        <button id="reset-btn" class="secondary">RESTART</button>
+      </div>
+    </section>
+
+    <div class="touch-controls" aria-label="Touch controls">
+      <button id="left-btn" aria-label="Move left">←</button>
+      <button id="board-btn">BOARD</button>
+      <button id="right-btn" aria-label="Move right">→</button>
+    </div>
+
+    <footer>TIME DOESN'T WAIT. BUT YOU CAN CHOOSE WHEN TO MOVE.</footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
