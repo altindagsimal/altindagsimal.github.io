@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECHO — Your Past Catches You</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <div>
+        <p class="kicker">A TEMPORALITY EXPERIMENT</p>
+        <h1>ECHO<span>.</span></h1>
+        <p class="subtitle">YOUR PAST CATCHES YOU</p>
+      </div>
+      <div class="readout">
+        <span>TIME ALIVE</span>
+        <strong id="time-alive">00:00</strong>
+      </div>
+    </header>
+
+    <section class="game-frame">
+      <div class="arena-top">
+        <span>MEMORY FIELD <i></i></span>
+        <span id="status-label">WAITING FOR INPUT</span>
+      </div>
+      <div class="arena-wrap">
+        <canvas id="game" width="900" height="520" aria-label="Game arena. Move with arrow keys or WASD and avoid your echo."></canvas>
+        <div class="overlay" id="overlay">
+          <div class="overlay-card">
+            <p class="kicker" id="overlay-kicker">A RECORD IS BEING MADE</p>
+            <h2 id="overlay-title">DON'T LOOK BACK.</h2>
+            <p id="overlay-copy">Move through the field. After a few seconds, your earlier movements will return as an echo. Keep moving — your past is catching up.</p>
+            <button id="start-btn">ENTER THE FIELD</button>
+          </div>
+        </div>
+      </div>
+      <div class="game-footer">
+        <span><b class="legend-player"></b> YOU</span>
+        <span><b class="legend-echo"></b> YOUR ECHO</span>
+        <span id="delay-readout">ECHO DELAY: 4.0 SEC</span>
+      </div>
+    </section>
+
+    <section class="lower">
+      <div class="how-to">
+        <h2>KEEP MOVING</h2>
+        <p>Your echo repeats the path you took a few seconds ago. It moves faster than the memory it follows. If it reaches you, the past catches up.</p>
+        <div class="keys">
+          <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> OR ARROW KEYS <small>MOVE</small></span>
+          <span><kbd>SPACE</kbd> <small>PAUSE / RESUME</small></span>
+          <span><kbd>R</kbd> <small>RESTART</small></span>
+        </div>
+      </div>
+      <div class="buttons">
+        <button class="button-secondary" id="pause-btn">PAUSE</button>
+        <button class="button-secondary" id="reset-btn">RESTART</button>
+      </div>
+    </section>
+    <div class="touch-controls">
+      <button data-dir="up" aria-label="Move up">↑</button>
+      <div><button data-dir="left" aria-label="Move left">←</button><button data-dir="down" aria-label="Move down">↓</button><button data-dir="right" aria-label="Move right">→</button></div>
+    </div>
+    <footer>EVERY MOVE LEAVES SOMETHING BEHIND.</footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
