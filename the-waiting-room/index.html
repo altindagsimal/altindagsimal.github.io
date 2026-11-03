@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#11151d">
+  <title>THE WAITING ROOM — Some Things Only Happen When You Wait</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">◌</span>
+        <div>
+          <p class="eyebrow">A TEMPORAL EXPERIMENT</p>
+          <h1>THE WAITING ROOM</h1>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="pauseBtn" class="text-button" type="button" disabled>PAUSE</button>
+        <button id="resetBtn" class="text-button" type="button">RESET</button>
+      </div>
+    </header>
+
+    <section class="experience" aria-label="Interactive waiting room">
+      <div class="room" id="room">
+        <div class="window">
+          <div class="sky" id="sky">
+            <div class="sun" id="sun"></div>
+            <div class="moon" id="moon"></div>
+            <div class="cloud cloud-one"></div>
+            <div class="cloud cloud-two"></div>
+            <div class="distant-hills"></div>
+            <div class="near-hills"></div>
+          </div>
+          <div class="window-frame vertical"></div>
+          <div class="window-frame horizontal"></div>
+        </div>
+
+        <div class="wall-clock" aria-label="Elapsed time">
+          <div class="clock-face">
+            <span class="clock-hand" id="clockHand"></span>
+            <span class="clock-pin"></span>
+          </div>
+        </div>
+
+        <div class="floor"></div>
+        <div class="floor-shadow"></div>
+        <div class="chair-shadow"></div>
+        <div class="chair" aria-label="An empty chair">
+          <div class="chair-back"></div>
+          <div class="chair-seat"></div>
+          <div class="chair-leg leg-left"></div>
+          <div class="chair-leg leg-right"></div>
+          <div class="chair-leg leg-back-left"></div>
+          <div class="chair-leg leg-back-right"></div>
+        </div>
+
+        <div class="stage-caption" id="stageCaption" aria-live="polite">THE ROOM IS STILL</div>
+        <div class="overlay" id="overlay">
+          <div class="overlay-card">
+            <p class="eyebrow">A MOMENT OUT OF TIME</p>
+            <h2 id="overlayTitle">Take a seat.<br>Stay a while.</h2>
+            <p id="overlayText">Nothing is required of you. The room will change as time passes.</p>
+            <button id="startBtn" class="primary-button" type="button">ENTER THE ROOM <span aria-hidden="true">→</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bottom-bar">
+      <div class="time-block">
+        <span class="eyebrow">TIME SPENT</span>
+        <strong id="timer" aria-live="off">00:00</strong>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span id="stageName">BEFORE THE WAIT</span><span id="progressText">0%</span></div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+      <p class="instruction" id="instruction">Stay and notice what changes.</p>
+    </footer>
+    <p class="footer-note">A SMALL EXPERIMENT IN DURATION, PRESENCE &amp; CHANGE</p>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
