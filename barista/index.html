@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Counter</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>Counter</h1>
+  <p id="intro">Order a drink. See how the barista answers.</p>
+
+  <div id="scene">
+    <svg id="art" viewBox="0 0 640 360" data-level="0" data-cup="0" role="img" aria-label="A cafe counter with a barista, a speech bubble and a cup">
+      <rect id="wall" width="640" height="360" fill="#ffe0b8"/>
+      <rect y="225" width="640" height="40" fill="#f2b98c"/>
+
+      <!-- Pencere -->
+      <rect x="20" y="40" width="120" height="110" rx="8" fill="#8a5a3c"/>
+      <rect x="28" y="48" width="104" height="94" rx="4" fill="#bfe6ff"/>
+      <circle cx="100" cy="76" r="16" fill="#ffd166"/>
+      <path d="M80 142 V48 M28 95 H132" stroke="#8a5a3c" stroke-width="5"/>
+
+      <!-- Menü tahtası -->
+      <rect x="160" y="50" width="100" height="92" rx="6" fill="#2f3e46"/>
+      <g fill="#fff" font-family="system-ui, sans-serif" font-size="14" text-anchor="middle">
+        <text x="210" y="74">Menu</text><text x="210" y="97">Tea</text><text x="210" y="116">Coffee</text><text x="210" y="135">Lemonade</text>
+      </g>
+
+      <!-- Lamba -->
+      <path d="M310 0 V40" stroke="#6b4226" stroke-width="3"/>
+      <circle id="glow" cx="310" cy="62" r="46" fill="#ffd166" opacity=".3"/>
+      <path d="M282 40 H338 L324 68 H296 Z" fill="#ffb703"/>
+
+      <!-- Raf ve kavanozlar -->
+      <rect x="540" y="96" width="90" height="8" fill="#8a5a3c"/>
+      <rect x="548" y="66" width="18" height="30" rx="3" fill="#90be6d"/>
+      <rect x="574" y="72" width="18" height="24" rx="3" fill="#f9c74f"/>
+      <rect x="600" y="62" width="18" height="34" rx="3" fill="#f9844a"/>
+
+      <!-- Kahve makinesi -->
+      <g id="machine">
+        <rect x="548" y="170" width="76" height="82" rx="8" fill="#4a4e69"/>
+        <rect x="560" y="206" width="52" height="34" rx="4" fill="#22223b"/>
+        <circle class="light l1" cx="566" cy="188" r="5" fill="#f94144"/>
+        <circle class="light l2" cx="582" cy="188" r="5" fill="#90be6d"/>
+        <circle class="light l3" cx="598" cy="188" r="5" fill="#f9c74f"/>
+      </g>
+
+      <!-- Barista -->
+      <g transform="translate(470 0)"><g id="barista">
+        <g id="body">
+          <rect id="shirt" x="-46" y="190" width="92" height="72" rx="22" fill="#577590"/>
+          <rect id="apron" x="-32" y="206" width="64" height="60" rx="10" fill="#2f9e8f"/>
+          <g id="armR"><path d="M40 205 L62 246" stroke="#577590" stroke-width="14" stroke-linecap="round"/><circle cx="62" cy="248" r="9" fill="#f2c29b"/></g>
+          <g id="armL"><path d="M-40 205 L-62 246" stroke="#577590" stroke-width="14" stroke-linecap="round"/><circle cx="-62" cy="248" r="9" fill="#f2c29b"/></g>
+        </g>
+        <g id="head">
+          <circle cx="0" cy="150" r="38" fill="#f2c29b"/>
+          <path id="hair" d="M-40 152 C-46 104 46 104 40 152 C30 128 -30 128 -40 152 Z" fill="#5a3a2a"/>
+          <circle id="bun" cx="0" cy="100" r="14" fill="#5a3a2a"/>
+          <ellipse class="eye" cx="-14" cy="154" rx="4" ry="5" fill="#2b2b2b"/>
+          <ellipse class="eye" cx="14" cy="154" rx="4" ry="5" fill="#2b2b2b"/>
+          <path class="brow" d="M-20 144 Q-14 140 -8 144 M8 144 Q14 140 20 144" stroke="#2b2b2b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <circle class="cheek" cx="-25" cy="166" r="6" fill="#ff8fa3"/>
+          <circle class="cheek" cx="25" cy="166" r="6" fill="#ff8fa3"/>
+          <path class="mouth m0" d="M-8 171 Q0 174 8 171" stroke="#8b2c3b" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path class="mouth m1" d="M-12 168 Q0 181 12 168" stroke="#8b2c3b" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path class="mouth m2" d="M-14 166 Q0 188 14 166 Z" fill="#8b2c3b"/>
+        </g>
+        <g class="sparkles" fill="#ffd166">
+          <path class="sp s1" d="M-62 120 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 Z"/>
+          <path class="sp s2" d="M62 112 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 Z"/>
+          <path class="sp s3" d="M0 78 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 Z"/>
+        </g>
+      </g></g>
+
+      <!-- Tezgah -->
+      <rect id="counterFront" y="262" width="640" height="98" fill="#a0693f"/>
+      <rect id="counterTop" y="250" width="640" height="16" fill="#c68b59"/>
+
+      <!-- Bardak -->
+      <g transform="translate(340 252)">
+        <g id="cup">
+          <ellipse cx="0" cy="0" rx="30" ry="6" fill="#fff"/>
+          <path id="cupBody" d="M-20 -38 L20 -38 L15 -2 L-15 -2 Z" fill="#c9873a" stroke="#fff" stroke-width="3"/>
+          <path d="M20 -30 q16 2 -2 18" stroke="#fff" stroke-width="4" fill="none"/>
+          <g class="steam" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round">
+            <path class="w w1" d="M-8 -44 q6 -8 0 -16 t0 -16"/>
+            <path class="w w2" d="M2 -44 q6 -8 0 -16 t0 -16"/>
+            <path class="w w3" d="M12 -44 q6 -8 0 -16 t0 -16"/>
+          </g>
+        </g>
+      </g>
+    </svg>
+    <div id="bubble" aria-live="polite">Welcome. What can I get you?</div>
+  </div>
+
+  <p id="levelLine">Barista: <strong id="levelText">Stranger</strong> · Cup: <strong id="cupLabel">none yet</strong></p>
+  <p id="status" aria-live="polite"> </p>
+
+  <div id="orders" role="group" aria-label="Order a drink"></div>
+
+  <div id="controls">
+    <button id="pauseBtn" type="button" aria-pressed="false">Pause</button>
+    <button id="resetBtn" type="button">Reset</button>
+  </div>
+  <div id="conditions" role="group" aria-label="Barista rule">
+    <button id="memoryBtn" type="button" aria-pressed="true">Remembers</button>
+    <button id="noMemoryBtn" type="button" aria-pressed="false">Does not remember</button>
+  </div>
+
+  <h2>Visits</h2>
+  <ol id="log" aria-label="Visit log"></ol>
+
+  <p id="keys">Keys: 1 Tea · 2 Coffee · 3 Lemonade · P pause · R reset</p>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
