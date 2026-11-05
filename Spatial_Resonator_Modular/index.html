@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spatial Resonator - NMED 3203 Project</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="title-area">
+            <h1>Spatial Resonator</h1>
+            <p>Context (Window & Light) × Feedback (Visual & Audio Grid)</p>
+        </div>
+        <div class="instructions" id="instruction-text">
+            Resize window to change acoustic space. Click grid or use keys [A-K] to trigger sound feedback.
+        </div>
+    </header>
+
+    <div class="keyboard-hint">
+        Keys: [A, S, D, F, G, H, J, K] | Arrows: Light Level
+    </div>
+
+    <main>
+        <canvas id="canvas"></canvas>
+
+        <div class="controls-overlay">
+            <div class="control-group">
+                <label for="light-slider">Ambient Light:</label>
+                <input type="range" id="light-slider" min="0" max="100" value="50">
+            </div>
+            <button class="btn" id="autoplay-btn">Toggle Rhythmic Pulse</button>
+            <button class="btn" id="reset-btn">Reset View</button>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
