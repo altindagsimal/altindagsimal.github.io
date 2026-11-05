@@ -1,0 +1,24 @@
+/* Counter – sade, sıcak tezgâh */
+:root { --bg:#1d1814; --panel:#2a231d; --text:#f3ebe0; --line:#a8957f; --accent:#f0b35a; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font-family:system-ui, sans-serif; line-height:1.5; }
+main { max-width:640px; margin:0 auto; padding:16px; }
+h1 { margin:0 0 4px; font-size:1.5rem; }
+h2 { font-size:1.1rem; margin:20px 0 6px; }
+#scene { background:var(--panel); border:2px solid var(--line); padding:16px; text-align:center; }
+#bubble { min-height:3.2em; padding:10px 14px; border:2px solid var(--line); border-radius:12px; display:inline-block; max-width:100%; }
+#level { margin:8px 0; }
+#cupWrap { height:130px; position:relative; }
+#cup { width:64px; height:56px; margin:60px auto 0; border:3px solid var(--text); border-top:none; border-radius:0 0 18px 18px; background:transparent; }
+#steam { position:absolute; left:0; right:0; top:20px; height:40px; display:flex; justify-content:center; gap:10px; }
+#steam span { width:4px; height:30px; background:var(--text); opacity:.7; border-radius:2px; animation:rise 1.6s ease-in-out infinite; }
+@keyframes rise { 0% { transform:translateY(8px); opacity:0; } 50% { opacity:.7; } 100% { transform:translateY(-8px); opacity:0; } }
+#cupLabel { margin:4px 0 0; }
+#bar { height:10px; background:var(--line); margin-top:8px; }
+#status { min-height:1.5em; margin:8px 0; }
+#orders, #controls, #conditions { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
+button { min-height:44px; padding:0 16px; font:inherit; color:var(--text); background:var(--panel); border:2px solid var(--line); border-radius:6px; cursor:pointer; }
+button[aria-pressed="true"] { border-color:var(--accent); font-weight:700; text-decoration:underline; }
+#log { padding-left:20px; max-height:220px; overflow:auto; }
+:focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
+@media (prefers-reduced-motion: reduce) { #steam span { animation:none; opacity:.7; } }
