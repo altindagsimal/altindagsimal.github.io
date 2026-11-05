@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5efe4">
+  <title>Steep — The Memory of Tea</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="wordmark" href="#" aria-label="Steep home">steep<span>.</span></a>
+      <p class="edition">A SMALL STUDY OF TIME</p>
+      <button class="reset-button" id="resetButton" type="button">Reset current cup ↺</button>
+    </header>
+
+    <section class="intro" aria-labelledby="pageTitle">
+      <p class="eyebrow">INTERACTION HAPPENS IN TIME</p>
+      <h1 id="pageTitle">The perfect cup<br>takes <em>your</em> time.</h1>
+      <p class="intro-copy">Hold the tea bag in the cup. Watch time change the tea.<br>Let go when it feels right.</p>
+    </section>
+
+    <section class="brewing-area" aria-label="Tea brewing area">
+      <div class="cup-stage">
+        <div class="steam steam-one" aria-hidden="true"></div>
+        <div class="steam steam-two" aria-hidden="true"></div>
+        <div class="cup" id="cup" aria-label="Current tea cup">
+          <div class="tea-liquid" id="teaLiquid"></div>
+          <div class="cup-highlight" aria-hidden="true"></div>
+          <div class="cup-handle" aria-hidden="true"></div>
+        </div>
+        <button class="tea-bag" id="teaBag" type="button"
+          aria-label="Press and hold to steep the tea. You can also hold the Space key when this control is focused.">
+          <span class="bag-string" aria-hidden="true"></span>
+          <span class="bag-tag" aria-hidden="true">TEA</span>
+        </button>
+      </div>
+
+      <div class="brew-info">
+        <p class="status-label" id="statusLabel" aria-live="polite">READY WHEN YOU ARE</p>
+        <div class="timer" id="timer" aria-live="off">0.0<span>s</span></div>
+        <p class="strength" id="strengthLabel">Very light</p>
+        <p class="instruction" id="instruction">Press and hold the tea bag to begin</p>
+        <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+        <p class="key-hint">Mouse / touch: hold the tea bag · Keyboard: hold SPACE</p>
+      </div>
+    </section>
+
+    <section class="memory-section" aria-labelledby="memoryTitle">
+      <div class="memory-heading">
+        <div>
+          <p class="eyebrow">YOUR BREWING HISTORY</p>
+          <h2 id="memoryTitle">The tea shelf</h2>
+        </div>
+        <p class="memory-count" id="memoryCount">0 / 5 cups</p>
+      </div>
+      <div class="shelf" id="shelf" aria-live="polite">
+        <p class="empty-message" id="emptyMessage">Your first cup will find its place here.</p>
+      </div>
+      <div class="shelf-line" aria-hidden="true"></div>
+      <p class="memory-note">Each cup keeps the colour and duration of a moment you chose.</p>
+    </section>
+
+    <footer class="footer">
+      <span>STEEP — THE MEMORY OF TEA</span>
+      <span>TAKE YOUR TIME.</span>
+    </footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
