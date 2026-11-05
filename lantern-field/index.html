@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lantern Field</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>Lantern Field</h1>
+  <p id="intro">Drag the lantern, or use the arrow keys. Guide the lights into the ring.</p>
+
+  <canvas id="field" width="800" height="500" tabindex="0"
+          aria-label="Field with a lantern, drifting lights and a target ring"></canvas>
+
+  <div id="readout">
+    <p>Calm: <strong id="calmText">Low</strong> <span id="calmBar" aria-hidden="true"><span id="calmFill"></span></span></p>
+    <p>Lantern: <strong id="moveText">Still</strong></p>
+    <p id="ringText" aria-live="polite">Ring: not reached</p>
+  </div>
+
+  <div id="controls">
+    <button id="holdBtn" type="button">Hold still</button>
+    <button id="pauseBtn" type="button" aria-pressed="false">Pause</button>
+    <button id="resetBtn" type="button">Reset</button>
+  </div>
+
+  <div id="conditions" role="group" aria-label="Pull rule">
+    <button id="gentleBtn" type="button" aria-pressed="true">Gentle pull</button>
+    <button id="fixedBtn" type="button" aria-pressed="false">Fixed pull</button>
+  </div>
+
+  <p id="keys">Arrows move · Shift + arrows move fast · Space holds still · P pauses · R resets</p>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

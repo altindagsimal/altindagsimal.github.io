@@ -1,0 +1,17 @@
+/* Lantern Field – sade, koyu arka plan */
+:root { --bg:#0d1020; --panel:#171b30; --text:#e9ecf5; --accent:#ffd27a; --line:#8d96b8; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font-family:system-ui, sans-serif; line-height:1.5; }
+main { max-width:840px; margin:0 auto; padding:16px; }
+h1 { margin:0 0 4px; font-size:1.5rem; }
+#intro, #keys { margin:4px 0 12px; max-width:65ch; }
+canvas { display:block; width:100%; height:auto; background:var(--bg); border:2px solid var(--line); touch-action:none; }
+#readout { display:flex; flex-wrap:wrap; gap:4px 24px; margin:12px 0; }
+#readout p { margin:0; }
+#calmBar { display:inline-block; width:90px; height:10px; border:1px solid var(--line); vertical-align:middle; margin-left:6px; }
+#calmFill { display:block; height:100%; width:10%; background:var(--accent); }
+#controls, #conditions { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
+button { min-height:44px; padding:0 16px; font:inherit; color:var(--text); background:var(--panel); border:2px solid var(--line); border-radius:6px; cursor:pointer; }
+button[aria-pressed="true"] { border-color:var(--accent); font-weight:700; text-decoration:underline; }
+button:active { background:#262c4d; }
+:focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
